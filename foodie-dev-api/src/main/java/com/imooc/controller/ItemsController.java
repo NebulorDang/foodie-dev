@@ -87,5 +87,59 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(grid);
     }
 
+    @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表", httpMethod = "GET")
+    @GetMapping("/search")
+    public IMOOCJSONResult search(
+            @ApiParam(name = "keywords", value = "关键字", required = true)
+            @RequestParam String keywords,
+            @ApiParam(name = "sort", value = "排序方式", required = false)
+            @RequestParam String sort,
+            @ApiParam(name = "page", value = "当前页号", required = false)
+            @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "每页显示的数量", required = false)
+            @RequestParam Integer pageSize
+    ) {
+        if (StringUtils.isBlank(keywords)) {
+            return IMOOCJSONResult.errorMsg("关键字不能为空");
+        }
+        if (page == null) {
+            page = 1;
+        }
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        PagedGridResult grid = itemService.searchItems(keywords, sort, page, pageSize);
+
+        return IMOOCJSONResult.ok(grid);
+    }
+
+    @ApiOperation(value = "根据分类id搜索商品列表", notes = "根据分类id搜索商品列表", httpMethod = "GET")
+    @GetMapping("/catItems")
+    public IMOOCJSONResult catItems(
+            @ApiParam(name = "catId", value = "分类id", required = true)
+            @RequestParam Integer catId,
+            @ApiParam(name = "sort", value = "排序方式", required = false)
+            @RequestParam String sort,
+            @ApiParam(name = "page", value = "当前页号", required = false)
+            @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "每页显示的数量", required = false)
+            @RequestParam Integer pageSize
+    ) {
+        if (catId == null) {
+            return IMOOCJSONResult.errorMsg("分类id不能为空");
+        }
+        if (page == null) {
+            page = 1;
+        }
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        PagedGridResult grid = itemService.searchItems(catId, sort, page, pageSize);
+
+        return IMOOCJSONResult.ok(grid);
+    }
+
 }
 
