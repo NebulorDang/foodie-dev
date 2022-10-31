@@ -37,7 +37,7 @@ public class ShopCartController {
         return IMOOCJSONResult.ok();
     }
 
-    @ApiOperation(value = "删除购物车中的物品", notes = "删除购物车中的物品", httpMethod = "get")
+    @ApiOperation(value = "删除购物车中的物品", notes = "删除购物车中的物品", httpMethod = "GET")
     @PostMapping("/del")
     public IMOOCJSONResult del(
             @ApiParam(name = "userId", value = "用户id", required = true)
