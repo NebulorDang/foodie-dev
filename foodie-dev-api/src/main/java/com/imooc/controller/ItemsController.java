@@ -141,5 +141,19 @@ public class ItemsController extends BaseController {
         return IMOOCJSONResult.ok(grid);
     }
 
+    //用于用户长时间未登录网站，刷新购物车中的数据（主要是商品价格），类似京东淘宝
+    @ApiOperation(value = "商品规格id搜索商品列表", notes = "根据分类id搜索商品列表", httpMethod = "GET")
+    @GetMapping("/refresh")
+    public IMOOCJSONResult refresh(
+            @ApiParam(name = "itemSpecIds", value = "商品规格id", required = true)
+            @RequestParam String itemSpecIds
+    ) {
+        if (itemSpecIds == null) {
+            return IMOOCJSONResult.errorMsg("商品规格id不能为空");
+        }
+
+        return IMOOCJSONResult.ok(itemService.searchItemsBySpecIds(itemSpecIds));
+    }
+
 }
 
