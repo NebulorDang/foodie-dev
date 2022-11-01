@@ -17,4 +17,6 @@ public interface ItemsMapperCustom {
 
     public List<ShopCartVO> queryItemsBySpecIds(@Param("paramsList") List<String> specIdList);
 
+    public int decreaseItemSpecStock(@Param("specId") String specId,
+                                     @Param("pendingCounts") int pendingCounts);
 }

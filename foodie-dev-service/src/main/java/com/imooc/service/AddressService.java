@@ -43,6 +43,13 @@ public interface AddressService {
      * @return
      */
     public void setDefaultUserAddress(String userId, String addressId);
+
+    /**
+     * 根据主键查询userAddress
+     * @param addressId
+     * @return userAddress
+     */
+    public UserAddress getUserAddressByPrimaryKey(String addressId);
 }
 
 
