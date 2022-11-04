@@ -6,7 +6,7 @@ package com.imooc.enums;
 
 public enum Sex {
     WOMAN(0, "女"),
-    MAN(0, "男"),
+    MAN(1, "男"),
     SECRET(2, "保密");
 
     public final Integer type;
