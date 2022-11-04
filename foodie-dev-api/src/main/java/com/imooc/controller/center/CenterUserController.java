@@ -3,6 +3,7 @@ package com.imooc.controller.center;
 import com.imooc.controller.BaseController;
 import com.imooc.pojo.Users;
 import com.imooc.pojo.bo.center.CenterUserBO;
+import com.imooc.resource.FileUpload;
 import com.imooc.service.center.CenterUserService;
 import com.imooc.utils.CookieUtils;
 import com.imooc.utils.IMOOCJSONResult;
@@ -36,6 +37,9 @@ public class CenterUserController extends BaseController {
 
     @Autowired
     private CenterUserService centerUserService;
+
+    @Autowired
+    private FileUpload fileUpload;
 
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息", httpMethod = "POST")
     @PostMapping("update")
@@ -75,7 +79,9 @@ public class CenterUserController extends BaseController {
             HttpServletResponse response
     ) {
         // 定义头像保存的地址
-        String fileSpace = IMAGE_USER_FACE_LOCATION;
+//        String fileSpace = IMAGE_USER_FACE_LOCATION;
+        String fileSpace = fileUpload.getImageUserFaceLocation();
+
         // 在路径上为每一个用户增加一个子文件夹，用userId区分
         String uploadPathPrefix = File.separator + userId;
 
@@ -89,7 +95,7 @@ public class CenterUserController extends BaseController {
 
                 if (StringUtils.isNotBlank(fileName)) {
                     // 文件重命名 imooc-face.png -> ["imooc-face", "png"]
-                    String fileNameArr[] = fileName.split("\\.");
+                    String[] fileNameArr = fileName.split("\\.");
 
                     //获取文件的后缀名
                     String suffix = fileNameArr[fileNameArr.length - 1];
