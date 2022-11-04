@@ -41,8 +41,8 @@ spring:
     multipart:
 #      max-file-size: 512000     # 文件上传大小限制为500kb
 #      max-request-size: 512000  # 请求大小限制为500kb
-      max-file-size: 10240000     # 文件上传大小限制为10M
-      max-request-size: 10240000  # 请求大小限制为10M
+      max-file-size: 10MB     # 文件上传大小限制为10M
+      max-request-size: 10MB  # 请求大小限制为10M
 
 ############################################################
 #
