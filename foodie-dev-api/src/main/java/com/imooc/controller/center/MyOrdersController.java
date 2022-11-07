@@ -1,7 +1,7 @@
 package com.imooc.controller.center;
 
 import com.imooc.controller.BaseController;
-import com.imooc.pojo.Orders;
+import com.imooc.pojo.vo.OrderStatusCountsVO;
 import com.imooc.service.center.MyOrdersService;
 import com.imooc.utils.*;
 import io.swagger.annotations.Api;
@@ -103,17 +103,45 @@ public class MyOrdersController extends BaseController {
         return IMOOCJSONResult.ok();
     }
 
-    /**
-     * 用于验证用户和订单是否有关联关系，避免非法用户调用
-     *
-     * @return
-     */
-//    private IMOOCJSONResult checkUserOrder(String userId, String orderId) {
-//        Orders order = myOrdersService.queryMyOrder(userId, orderId);
-//        if (order == null) {
-//            return IMOOCJSONResult.errorMsg("订单不存在！");
-//        }
-//        return IMOOCJSONResult.ok();
-//    }
+    @ApiOperation(value = "获得订单状态数概况", notes = "获得订单状态数概况", httpMethod = "POST")
+    @PostMapping("/statusCounts")
+    public IMOOCJSONResult statusCounts(
+            @ApiParam(name = "userId", value = "用户id", required = true)
+            @RequestParam String userId) {
 
+        if (StringUtils.isBlank(userId)) {
+            return IMOOCJSONResult.errorMsg("用户ID不能为空");
+        }
+
+        OrderStatusCountsVO result = myOrdersService.getOrderStatusCounts(userId);
+
+        return IMOOCJSONResult.ok(result);
+    }
+
+    @ApiOperation(value = "查询订单动向", notes = "查询订单动向", httpMethod = "POST")
+    @PostMapping("/trend")
+    public IMOOCJSONResult trend(
+            @ApiParam(name = "userId", value = "用户id", required = true)
+            @RequestParam String userId,
+            @ApiParam(name = "page", value = "当前页号", required = false)
+            @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "每页显示的数量", required = false)
+            @RequestParam Integer pageSize
+        ) {
+
+        if (StringUtils.isBlank(userId)) {
+            return IMOOCJSONResult.errorMsg("用户ID不能为空");
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
+        }
+
+        PagedGridResult grid = myOrdersService.getOrdersTrend(userId, page, pageSize);
+
+        return IMOOCJSONResult.ok(grid);
+    }
 }

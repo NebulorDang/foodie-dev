@@ -1,7 +1,6 @@
 package com.imooc.service.impl.center;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.imooc.enums.OrderStatusEnum;
 import com.imooc.enums.YesOrNo;
 import com.imooc.mapper.OrderStatusMapper;
@@ -10,7 +9,9 @@ import com.imooc.mapper.OrdersMapperCustom;
 import com.imooc.pojo.OrderStatus;
 import com.imooc.pojo.Orders;
 import com.imooc.pojo.vo.MyOrdersVO;
+import com.imooc.pojo.vo.OrderStatusCountsVO;
 import com.imooc.service.center.MyOrdersService;
+import com.imooc.service.impl.BaseService;
 import com.imooc.utils.PagedGridResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MyOrdersServiceImpl implements MyOrdersService {
+public class MyOrdersServiceImpl extends BaseService implements MyOrdersService {
     @Autowired
     private OrdersMapperCustom ordersMapperCustom;
 
@@ -42,29 +43,18 @@ public class MyOrdersServiceImpl implements MyOrdersService {
                                          Integer pageSize) {
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
-        if(orderStatus != null) {
+        if (orderStatus != null) {
             map.put("orderStatus", orderStatus);
         }
 
         PageHelper.startPage(page, pageSize);
 
-        List<MyOrdersVO> list =  ordersMapperCustom.queryMyOrders(map);
+        List<MyOrdersVO> list = ordersMapperCustom.queryMyOrders(map);
 
         return setterPagedGrid(list, page);
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS)
-    PagedGridResult setterPagedGrid(List<?> list, Integer page) {
-        PageInfo<?> pageList = new PageInfo<>(list);
-        PagedGridResult grid = new PagedGridResult();
-        grid.setPage(page);
-        grid.setRows(list);
-        grid.setTotal(pageList.getPages());
-        grid.setRecords(pageList.getTotal());
-        return grid;
-    }
-
-    @Transactional(propagation=Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void updateDeliverOrderStatus(String orderId) {
 
@@ -80,7 +70,7 @@ public class MyOrdersServiceImpl implements MyOrdersService {
         orderStatusMapper.updateByExampleSelective(updateOrder, example);
     }
 
-    @Transactional(propagation=Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Orders queryMyOrder(String userId, String orderId) {
 
@@ -121,5 +111,43 @@ public class MyOrdersServiceImpl implements MyOrdersService {
 
         int result = ordersMapper.updateByExampleSelective(updateOrder, example);
         return result == 1;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public OrderStatusCountsVO getOrderStatusCounts(String userId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("orderStatus", OrderStatusEnum.WAIT_PAY.type);
+
+        int waitPayCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+
+        map.put("orderStatus", OrderStatusEnum.WAIT_DELIVER.type);
+        int waitDeliverCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+
+        map.put("orderStatus", OrderStatusEnum.WAIT_RECEIVE.type);
+        int waitReceiveCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+
+        map.put("orderStatus", OrderStatusEnum.SUCCESS.type);
+        map.put("isComment", YesOrNo.NO.type);
+        int waitCommentCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+
+        return new OrderStatusCountsVO(
+                waitPayCounts,
+                waitDeliverCounts,
+                waitReceiveCounts,
+                waitCommentCounts);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult getOrdersTrend(String userId, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+
+        PageHelper.startPage(page, pageSize);
+        List<OrderStatus> list = ordersMapperCustom.getMyOrderTrend(map);
+
+        return setterPagedGrid(list, page);
     }
 }
