@@ -108,12 +108,12 @@ public class MyOrdersController extends BaseController {
      *
      * @return
      */
-    private IMOOCJSONResult checkUserOrder(String userId, String orderId) {
-        Orders order = myOrdersService.queryMyOrder(userId, orderId);
-        if (order == null) {
-            return IMOOCJSONResult.errorMsg("订单不存在！");
-        }
-        return IMOOCJSONResult.ok();
-    }
+//    private IMOOCJSONResult checkUserOrder(String userId, String orderId) {
+//        Orders order = myOrdersService.queryMyOrder(userId, orderId);
+//        if (order == null) {
+//            return IMOOCJSONResult.errorMsg("订单不存在！");
+//        }
+//        return IMOOCJSONResult.ok();
+//    }
 
 }
