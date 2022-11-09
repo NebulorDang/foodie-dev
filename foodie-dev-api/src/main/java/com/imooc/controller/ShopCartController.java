@@ -21,14 +21,12 @@ public class ShopCartController {
     public IMOOCJSONResult add(
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam String userId,
-            @ApiParam(name = "itemSpecId", value = "商品规格id", required = true)
-            @RequestParam String ItempSpecId,
             @RequestBody ShopCartBO shopCartBO,
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        if (StringUtils.isBlank(userId) || StringUtils.isBlank(ItempSpecId)) {
-            return IMOOCJSONResult.errorMsg("用户或商品规格id不能为空");
+        if (StringUtils.isBlank(userId)) {
+            return IMOOCJSONResult.errorMsg("用户id不能为空");
         }
 
         System.out.println(shopCartBO);
@@ -43,11 +41,11 @@ public class ShopCartController {
             @ApiParam(name = "userId", value = "用户id", required = true)
             @RequestParam String userId,
             @ApiParam(name = "itemSpecId", value = "商品规格id", required = true)
-            @RequestParam String ItempSpecId,
+            @RequestParam String itemSpecId,
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        if (StringUtils.isBlank(userId) || StringUtils.isBlank(ItempSpecId)) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(itemSpecId)) {
             return IMOOCJSONResult.errorMsg("用户或商品规格id不能为空");
         }
 

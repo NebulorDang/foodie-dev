@@ -1,0 +1,13 @@
+############################################################
+#
+# web访问端口号  约定：8088
+#
+############################################################
+server:
+  port: 8088
+
+spring:
+  datasource:                                           # 数据源的相关配置
+    url: jdbc:mysql://192.168.7.194:3306/foodie-shop-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: 123456

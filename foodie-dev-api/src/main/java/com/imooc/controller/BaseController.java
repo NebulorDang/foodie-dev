@@ -25,7 +25,10 @@ public class BaseController {
 //    String payReturnUrl = "http://localhost:8088/orders/notifyMerchantOrderPaid";
 
     //内网穿透
-    String payReturnUrl = "http://mb376a.natappfree.cc/orders/notifyMerchantOrderPaid";
+//    String payReturnUrl = "http://mb376a.natappfree.cc/orders/notifyMerchantOrderPaid";
+
+    //内网穿透部署版本
+    String payReturnUrl = "http://3nvwsr.natappfree.cc/orders/notifyMerchantOrderPaid";
 
     // 用户上传头像的位置
 //    public static final String IMAGE_USER_FACE_LOCATION = "/workspace/images/foodie/faces";
