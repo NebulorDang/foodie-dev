@@ -3,6 +3,7 @@ package com.imooc.controller;
 import com.imooc.pojo.Users;
 import com.imooc.pojo.bo.ShopCartBO;
 import com.imooc.pojo.bo.UserBO;
+import com.imooc.pojo.vo.UsersVO;
 import com.imooc.service.UserService;
 import com.imooc.utils.CookieUtils;
 import com.imooc.utils.IMOOCJSONResult;
@@ -108,17 +109,19 @@ public class PassportController extends BaseController {
         if (userResult == null) {
             return IMOOCJSONResult.errorMsg("用户名或密码不正确");
         }
-        setNullProperty(userResult);
+//        setNullProperty(userResult);
 
 //        response.setHeader("Set-Cookie", "JSESSIONID=xxx;SameSite=None;Secure");
-        CookieUtils.setCookie(request, response, "user",
-                JsonUtils.objectToJson(userResult), true);
 
-        // TODO 生成用户token，存入redis会话
+        // 生成用户token，存入redis会话
+        UsersVO usersVO = convertUserVO(userResult);
+        CookieUtils.setCookie(request, response, "user",
+                JsonUtils.objectToJson(usersVO), true);
+
         // 同步曾经的购物车数据
         syncShopCartData(userResult.getId(), request, response);
 
-        return IMOOCJSONResult.ok(userResult);
+        return IMOOCJSONResult.ok();
     }
 
     /**
@@ -194,7 +197,9 @@ public class PassportController extends BaseController {
         // 用户退出登录，需要清空购物车
         CookieUtils.deleteCookie(request, response, FOODIE_SHOPCART);
 
-        // TODO 分布式会话中需要清楚用户数据
+        // 分布式会话中需要清除用户数据
+        redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
+
         return IMOOCJSONResult.ok();
     }
 
