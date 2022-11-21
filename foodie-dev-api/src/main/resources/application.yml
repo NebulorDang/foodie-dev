@@ -15,6 +15,7 @@ server:
 #
 ############################################################
 spring:
+  # 使用spring-session
   session:
     store-type: redis
   redis:
